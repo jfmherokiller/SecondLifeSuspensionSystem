@@ -18,12 +18,30 @@ float CompRange = 0.03000;
 float Hadjust;
 float TransformZ;
 vector original_distance;
+llSetLocalPos(vector offset)
+{
+    vector save = offset;
+    if(offset.x < 0.0) offset.x -= 1;
+    else offset.x += 1;
+    if(offset.y < 0.0) offset.y -= 1;
+    else offset.y += 1;
+    if(offset.z < 0.0) offset.z -= 1;
+    else offset.z += 1;
+    llSetPos(offset);
+    llSetPos(save);    
+}
+vector ConvertGlobalToLocal(vector gpos) {
+    list resets = llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION,PRIM_ROTATION]);
+    vector rpPOS = llList2Vector(resets, 0);
+    rotation rpROT = llList2Rot(resets, 1);
+    return ((gpos - rpPOS)/rpROT);
+}
 default{
     state_entry()
     {
         //grab postion of base
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION]), 0);
-        vector mypos = llGetPos();
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
+        vector mypos = llGetLocalPos();
         vector subpos = (basepos - mypos);
         original_distance = subpos;
         llSetTimerEvent(0.004);
@@ -55,9 +73,10 @@ default{
     }
     timer()
     {
-        list results = llCastRay(llGetPos(), llGetPos()+<0.0, 0.0, -5.0>, [0, 0, 1, TRUE] );
-        vector detectedP = llList2Vector(results,1);
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION]), 0);
+        
+        list results = llCastRay(llGetPos(), llGetPos() + <0.0,0.0,-5.0>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 2] );
+        vector detectedP = ConvertGlobalToLocal(llList2Vector(results,1));
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
         vector newpos = basepos + original_distance;
         if( newpos.z > original_distance.z) TransformZ = original_distance.z;
         /////////////////Shock FX/////////////////////
@@ -68,6 +87,9 @@ default{
         //Maximum Range    
         //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
         //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
-        llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POSITION, <newpos.x, newpos.y, detectedP.z>]);
+        //llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL, <5, 5, detectedP.z>]);
+        //llSay(0,(string)<newpos.x, newpos.y, detectedP.z>);
+        llSetLocalPos(<newpos.x, newpos.y, detectedP.z>);
+        //llSetPrimitiveParams([PRIM_POS_LOCAL,<newpos.x, newpos.y, detectedP.z>]);
     }
 }
