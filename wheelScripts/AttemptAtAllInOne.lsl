@@ -50,18 +50,18 @@ default{
     }
     link_message(integer snd, integer num, string msg, key id)
     {
-        
+
     }
     timer()
     {
         /////////////////Shock FX/////////////////////
-        V=llGetVel();SP=llVecMag(V);
-        POS_Z  = (UnCompressed+Hadjust)+(SP*0.01)+(V.z*-0.1);       
-        if (SP <= 0 | V.x == 0 ) {POS_Z =  (UnCompressed+Hadjust);} //UnCompressed
-        else if (V.z > 5){POS_Z = (UnCompressed+Hadjust)-CompRange;} //when the car lifts up
+        //V=llGetVel();SP=llVecMag(V);
+        //POS_Z  = (UnCompressed+Hadjust)+(SP*0.01)+(V.z*-0.1);       
+        //if (SP <= 0 | V.x == 0 ) {POS_Z =  (UnCompressed+Hadjust);} //UnCompressed
+        //else if (V.z > 5){POS_Z = (UnCompressed+Hadjust)-CompRange;} //when the car lifts up
         //Maximum Range    
-        else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
-        else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
-        llSetPrimitiveParams([PRIM_POSITION, <POS_X, POS_Y, POS_Z>]);
+        //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
+        //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
+        llSetPrimitiveParams([PRIM_POSITION, <POS_X, POS_Y, TransformZ>]);
     }
 }
