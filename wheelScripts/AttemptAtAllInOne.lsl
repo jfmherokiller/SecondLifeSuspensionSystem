@@ -68,6 +68,6 @@ default{
         //Maximum Range    
         //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
         //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
-        llSetPrimitiveParams([PRIM_POSITION, <newpos.x, newpos.y, original_distance.z + detectedP.z>]);
+        llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POSITION, <newpos.x, newpos.y, detectedP.z>]);
     }
 }
