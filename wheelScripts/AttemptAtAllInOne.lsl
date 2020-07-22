@@ -55,6 +55,8 @@ default{
     }
     timer()
     {
+        list results = llCastRay(llGetPos(), llGetPos()+<0.0, 0.0, -5.0>, [0, 0, 1, TRUE] );
+        vector detectedP = llList2Vector(results,1);
         vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION]), 0);
         vector newpos = basepos + original_distance;
         if( newpos.z > original_distance.z) TransformZ = original_distance.z;
@@ -66,6 +68,6 @@ default{
         //Maximum Range    
         //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
         //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
-        llSetPrimitiveParams([PRIM_POSITION, <newpos.x, newpos.y, TransformZ>]);
+        llSetPrimitiveParams([PRIM_POSITION, <newpos.x, newpos.y, original_distance.z + detectedP.z>]);
     }
 }
