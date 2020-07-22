@@ -25,7 +25,7 @@ default{
         vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION]), 0);
         vector mypos = llGetPos();
         vector subpos = (basepos - mypos);
-        original_distance = llFabs(subpos.z);
+        original_distance = subpos.z;
         llSetTimerEvent(0.004);
     }
     collision_start(integer chargeval)
