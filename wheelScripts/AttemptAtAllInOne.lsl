@@ -22,9 +22,10 @@ default{
     state_entry()
     {
         //grab postion of base
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_Root,[PRIM_POSITION]), 0);
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POSITION]), 0);
         vector mypos = llGetPos();
-        original_distance = llFabs((basepos - mypos).z;
+        vector subpos = (basepos - mypos);
+        original_distance = llFabs(subpos.z);
         llSetTimerEvent(0.004);
     }
     collision_start(integer chargeval)
