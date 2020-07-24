@@ -57,7 +57,14 @@ TimerFunct() {
     }
     llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<original_distance.x, original_distance.y, TransformZ>]);
 }
-
+CheckConfig() {
+    if(llGetObjectDesc() == "") {
+        string newS = (string)original_distance;
+        llSetObjectDesc(newS);
+    } else {
+        original_distance = (vector)llGetObjectDesc();
+    }
+}
 default{
     state_entry()
     {
