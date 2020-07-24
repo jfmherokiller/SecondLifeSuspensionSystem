@@ -26,12 +26,13 @@ ObjectDetected(list result) {
     llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
     vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1));
     vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
-    if((lastDetection != llList2Key(result,0)) || (NumberOfDetections > 10) || (NumberOfNonDetections > 100)) {
+    if((lastDetection == llList2Key(result,0)) || (NumberOfDetections > 20)) {
         lastDetection = llList2Key(result,0);
         NumberOfDetections = 0;
         NumberOfNonDetections = 0;
+
         //add a half to keep wheel outside of prim
-        MoveWheel(detectedP+0.5,basepos);
+        MoveWheel(detectedP+<0.0,0.0,0.5>,basepos);
     } else {
         TransformZ = original_distance.z;
         NumberOfDetections++;
@@ -49,6 +50,10 @@ TimerFunct() {
         ObjectDetected(result);
     } else {
         NumberOfNonDetections++;
+        if((NumberOfNonDetections > 50)) {
+             TransformZ = original_distance.z;
+             NumberOfDetections = 0;
+        }
     }
     llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<original_distance.x, original_distance.y, TransformZ>]);
 }
