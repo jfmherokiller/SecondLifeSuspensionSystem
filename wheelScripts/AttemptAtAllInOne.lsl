@@ -55,8 +55,10 @@ TimerFunct() {
         //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
         //llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL, <5, 5, detectedP.z>]);
         //llSay(0,(string)<newpos.x, newpos.y, detectedP.z>);
-        llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<newpos.x, newpos.y, TransformZ>]);
+    } else {
+        TransformZ = original_distance.z;
     }
+        llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<original_distance.x, original_distance.y, TransformZ>]);
 }
 default{
     state_entry()
