@@ -36,11 +36,34 @@ vector ConvertGlobalToLocal(vector gpos) {
     rotation rpROT = llList2Rot(resets, 1);
     return ((gpos - rpPOS)/rpROT);
 }
+
+TimerFunct() {
+    list result = llCastRay(llGetPos(), llGetPos()+<0.0,0.0,-0.4>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 4]);
+    if(llList2Integer(result, -1)> 0) {
+        llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
+        vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1));
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
+        vector newpos = basepos + original_distance;
+        if( newpos.z > original_distance.z) TransformZ = newpos.z;
+        if(newpos.z < original_distance.z) TransformZ = original_distance.z;
+        /////////////////Shock FX/////////////////////
+        //V=llGetVel();SP=llVecMag(V);
+        //POS_Z  = (UnCompressed+Hadjust)+(SP*0.01)+(V.z*-0.1);       
+        //if (SP <= 0 | V.x == 0 ) {POS_Z =  (UnCompressed+Hadjust);} //UnCompressed
+        //else if (V.z > 5){POS_Z = (UnCompressed+Hadjust)-CompRange;} //when the car lifts up
+        //Maximum Range    
+        //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
+        //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
+        //llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL, <5, 5, detectedP.z>]);
+        //llSay(0,(string)<newpos.x, newpos.y, detectedP.z>);
+        llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<newpos.x, newpos.y, TransformZ>]);
+    }
+}
 default{
     state_entry()
     {
-        //grab postion of base
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
+        //grab postion of wheel
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POS_LOCAL]), 0);
         vector mypos = llGetLocalPos();
         vector subpos = (basepos - mypos);
         original_distance = subpos;
@@ -73,22 +96,6 @@ default{
     }
     timer()
     {
-        
-        list results = llCastRay(llGetPos(), llGetPos() + <0.0,0.0,-5.0>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 2] );
-        vector detectedP = ConvertGlobalToLocal(llList2Vector(results,1));
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
-        vector newpos = basepos + original_distance;
-        if( newpos.z > original_distance.z) TransformZ = original_distance.z;
-        /////////////////Shock FX/////////////////////
-        //V=llGetVel();SP=llVecMag(V);
-        //POS_Z  = (UnCompressed+Hadjust)+(SP*0.01)+(V.z*-0.1);       
-        //if (SP <= 0 | V.x == 0 ) {POS_Z =  (UnCompressed+Hadjust);} //UnCompressed
-        //else if (V.z > 5){POS_Z = (UnCompressed+Hadjust)-CompRange;} //when the car lifts up
-        //Maximum Range    
-        //else if (POS_Z > (UnCompressed+Hadjust)+CompRange)   {POS_Z = (UnCompressed+Hadjust)+CompRange;} //Compress
-        //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
-        //llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL, <5, 5, detectedP.z>]);
-        //llSay(0,(string)<newpos.x, newpos.y, detectedP.z>);
-        llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL,<newpos.x, newpos.y, detectedP.z>]);
+        TimerFunct();
     }
 }
