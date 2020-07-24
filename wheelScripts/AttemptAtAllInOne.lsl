@@ -38,11 +38,11 @@ vector ConvertGlobalToLocal(vector gpos) {
 }
 
 TimerFunct() {
-    list result = llCastRay(llGetPos(), llGetPos()+<0.0,0.0,-0.4>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 4]);
+    vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POSITION]), 0);
+    list result = llCastRay(basepos, basepos+<0.0,0.0,-0.4>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 4]);
     if(llList2Integer(result, -1)> 0) {
         llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
         vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1));
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
         vector newpos = basepos + original_distance;
         if( newpos.z > original_distance.z) TransformZ = newpos.z;
         if(newpos.z < original_distance.z) TransformZ = original_distance.z;
