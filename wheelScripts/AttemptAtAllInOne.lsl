@@ -59,6 +59,8 @@ TimerFunct() {
 }
 CheckConfig() {
     if(llGetObjectDesc() == "") {
+        vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POS_LOCAL]), 0);
+        original_distance = basepos;
         string newS = (string)original_distance;
         llSetObjectDesc(newS);
     } else {
@@ -69,9 +71,7 @@ default{
     state_entry()
     {
         //grab postion of wheel
-        vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POS_LOCAL]), 0);
-        vector mypos = llGetLocalPos();
-        vector subpos = (basepos - mypos);
+        CheckConfig();
         original_distance = basepos;
         TransformZ = original_distance.z;
         llSetTimerEvent(0.004);
