@@ -44,12 +44,12 @@ MoveWheel(vector detected,vector base) {
 }
 TimerFunct() {
     vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POSITION]), 0);
-    list result = llCastRay(basepos, basepos+<0.0,0.0,-0.5>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 1,RC_DETECT_PHANTOM,TRUE]);
+    list result = llCastRay(basepos, basepos+<0.0,0.0,-0.7>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 1,RC_DETECT_PHANTOM,TRUE]);
     if(llList2Integer(result, -1)> 0) {
         ObjectDetected(result);
     } else {
         NumberOfNonDetections++;
-        if((NumberOfNonDetections > 30)) {
+        if((NumberOfNonDetections > 20)) {
              TransformZ = original_distance.z;
              NumberOfDetections = 0;
              lastDetection = NULL_KEY;
