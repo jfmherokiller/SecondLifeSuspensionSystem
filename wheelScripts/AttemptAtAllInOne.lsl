@@ -4,6 +4,7 @@ integer NumberOfNonDetections;
 key lastDetection;
 float TransformZ;
 vector original_distance;
+float wheelEdge = 0.3;
 llSetLocalPos(vector offset)
 {
     vector save = offset;
@@ -23,15 +24,15 @@ vector ConvertGlobalToLocal(vector gpos) {
     return ((gpos - rpPOS)/rpROT);
 }
 ObjectDetected(list result) {
-    llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
-    vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1));
+    //llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
+    vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1))+ <0.0,0.0,wheelEdge>;
     vector basepos = llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_POS_LOCAL]), 0);
     if((lastDetection != llList2Key(result,0))) {
         lastDetection = llList2Key(result,0);
         NumberOfNonDetections = 0;
 
         //add a half to keep wheel outside of prim
-        MoveWheel(detectedP+<0.0,0.0,0.5>,basepos);
+        MoveWheel(detectedP,basepos);
     } else {
         NumberOfNonDetections++;
     }
@@ -56,6 +57,7 @@ TimerFunct() {
     }
     llSetLinkPrimitiveParamsFast(2,[PRIM_POS_LOCAL,<original_distance.x, original_distance.y, TransformZ>]);
 }
+
 default{
     state_entry()
     {
