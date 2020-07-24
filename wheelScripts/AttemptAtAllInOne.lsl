@@ -41,6 +41,7 @@ TimerFunct() {
     vector basepos = llList2Vector(llGetLinkPrimitiveParams(2,[PRIM_POSITION]), 0);
     list result = llCastRay(basepos+<0.0,0.0,-0.4>, basepos+<0.0,0.0,-0.8>, [RC_REJECT_TYPES, 0, RC_MAX_HITS, 4]);
     if(llList2Integer(result, -1)> 0) {
+        llRegionSayTo(llGetOwner(),0,llDumpList2String(result,","));
         vector detectedP = ConvertGlobalToLocal(llList2Vector(result,1));
         vector newpos = basepos + original_distance;
         if( newpos.z > original_distance.z) TransformZ = newpos.z;
