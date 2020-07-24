@@ -89,7 +89,6 @@ default{
         //else if (POS_Z < (UnCompressed+Hadjust)-CompRange)   {POS_Z = (UnCompressed+Hadjust)-CompRange;} //Decompress 
         //llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL, <5, 5, detectedP.z>]);
         //llSay(0,(string)<newpos.x, newpos.y, detectedP.z>);
-        llSetLocalPos(<newpos.x, newpos.y, detectedP.z>);
-        //llSetPrimitiveParams([PRIM_POS_LOCAL,<newpos.x, newpos.y, detectedP.z>]);
+        llSetLinkPrimitiveParamsFast(LINK_THIS,[PRIM_POS_LOCAL,<newpos.x, newpos.y, detectedP.z>]);
     }
 }
